@@ -27,9 +27,9 @@ export default function Letter({ guessedLetter, result }: LetterProps) {
   }
   return (
     <div
-      className={`select-none letter ${result ?? "letter-none"} ${
-        animated ? "animated" : ""
-      }`}
+      className={`select-none letter xs:w-[50px] xs:h-[50px] ${
+        result ?? "letter-none"
+      } ${animated ? "animated" : ""}`}
     >
       <label className="select-none">{guessedLetter}</label>
     </div>

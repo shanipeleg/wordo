@@ -214,7 +214,7 @@ export default function Wordo() {
     let word = wordMap[gameData.currentWordIndex];
     if (!word) return;
     return (
-      <div className="grid place-items-center h-[32rem]">
+      <div className="grid place-items-center h-[30rem] text-center">
         <div className={`word ${wordState}`}>
           {word.guessable.map((letter, index) => (
             <div
@@ -229,13 +229,13 @@ export default function Wordo() {
             </div>
           ))}
         </div>
-        <div className="centered">Hint: {word.hint}</div>
-        <div className="centered">{secondsLeft} seconds left!</div>
+        <div className="centered xs:w-[15em]">Hint: {word.hint}</div>
+        <div className="centered xs:w-[15em]">{secondsLeft} seconds left!</div>
       </div>
     );
   }
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center min-h-screen">
       {gameRunning ? (
         <>
           {wordMap && gameData ? (
@@ -269,15 +269,15 @@ export default function Wordo() {
           )}
         </>
       ) : (
-        <div className="grid place-items-center starting-div">
+        <div className="grid place-items-center starting-div text-center">
           <div className="mb-3">
             {!gameRecord.length ? (
-              <p>
+              <div className="mx-2 xs:w-[15em]">
                 You have {timeToAnswer} seconds to guess as many words as you
                 can!
-              </p>
+              </div>
             ) : (
-              <p>Great game!</p>
+              <div>Great game!</div>
             )}
           </div>
 

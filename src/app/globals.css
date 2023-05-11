@@ -65,8 +65,8 @@ body {
 }
 
 .key {
-  height: 60px;
-  width: 53px;
+  height: 3.8em;
+  width: 3.2em;
   display: grid;
   justify-content: center;
   align-content: center;
@@ -74,6 +74,26 @@ body {
   cursor: pointer;
   font-size: smaller;
   border-radius: 0.5em;
+}
+
+@media (max-width: 500px) {
+  .key {
+    width: 2em;
+    height: 2.3em;
+  }
+  .long-key {
+    width: 4.5em;
+    height: 2.5em;
+  }
+
+  .letter {
+    width: 50px;
+    height: 50px;
+  }
+
+  .stats-board {
+    width: 24em;
+  }
 }
 
 .default-key {
@@ -118,7 +138,6 @@ body {
 }
 
 .messages-container {
-  height: 100px;
   display: grid;
   justify-content: center;
   align-content: center;

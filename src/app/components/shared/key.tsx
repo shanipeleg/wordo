@@ -15,7 +15,7 @@ export default function key({ letter, onClick, result, icon }: KeyProps) {
       className={`key ${
         result ??
         "bg-gray-700 select-none hover:bg-gray-600 transition duration-500 transition ease-in-out"
-      }`}
+      } ${letter.length > 2 ? "long-key" : ""}`}
     >
       {icon ?? <label>{letter}</label>}
     </div>

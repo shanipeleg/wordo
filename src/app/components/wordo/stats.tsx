@@ -46,7 +46,7 @@ export default function Stats() {
   if (!statsRanked.length) return <></>;
   return (
     <div>
-      <div className="relative overflow-y-auto h-[22em]">
+      <div className="relative overflow-y-auto max-h-[22em] stats-board">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
