@@ -2,7 +2,7 @@
 
 Wordo is a fun word game written in Next.js, with Tailwind CSS. Test your vocabulary skills and have a great time guessing the word!
 
-Click [here](https://wordo.vercel.app/) to play Wordo!
+[Click here to play Wordo!](https://wordo.vercel.app/)
 
 ## Technologies Used
 
@@ -16,7 +16,7 @@ To run Wordo locally, follow these steps:
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/your-username/wordo.git
+   git clone https://github.com/shanipeleg/wordo
 
    ```
 
