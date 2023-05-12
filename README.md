@@ -11,16 +11,6 @@ Wordo is a fun word game that tests your vocabulary skills and brings joy while 
 - Implements Joi validation 🛡️ to ensure user input integrity
 - Manages game data using Prisma 🗄️, an easy-to-use ORM (Object-Relational Mapping) tool
 
-## Tech Stack
-
-- Next.js
-- Tailwind CSS
-- Node.js
-- Serverless Functions
-- SQL Database
-- Joi
-- Prisma
-
 Start playing Wordo now and enjoy an entertaining word-guessing experience! 🎮
 
 Wordo is currently hosted by vercel.

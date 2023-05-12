@@ -1,5 +1,3 @@
-import { gameDataRow } from "./components/wordle/wordle";
-
 export enum KEYS {
   ENTER = "ENTER",
   DEL = "DEL",
@@ -46,49 +44,4 @@ export const alphabet = [
   "X",
   "Y",
   "Z",
-];
-
-export const freshGameState: gameDataRow[] = [
-  {
-    inFocus: true,
-    guesses: ["", "", "", "", ""],
-    number: 1,
-    guessed: false,
-    results: [],
-  },
-  {
-    inFocus: false,
-    guesses: ["", "", "", "", ""],
-    number: 2,
-    guessed: false,
-    results: [],
-  },
-  {
-    inFocus: false,
-    guesses: ["", "", "", "", ""],
-    number: 3,
-    guessed: false,
-    results: [],
-  },
-  {
-    inFocus: false,
-    guesses: ["", "", "", "", ""],
-    number: 4,
-    guessed: false,
-    results: [],
-  },
-  {
-    inFocus: false,
-    guesses: ["", "", "", "", ""],
-    number: 5,
-    guessed: false,
-    results: [],
-  },
-  {
-    inFocus: false,
-    guesses: ["", "", "", "", ""],
-    number: 6,
-    guessed: false,
-    results: [],
-  },
 ];
