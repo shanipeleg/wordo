@@ -1,4 +1,4 @@
-import { gameDataRow } from "./wordle";
+import { gameDataRow } from "@/app/consts";
 import Word from "./word";
 
 interface BoardProps {

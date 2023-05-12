@@ -5,6 +5,14 @@ export enum KEYS {
   SKIP = "ARROWRIGHT",
 }
 
+export interface gameDataRow {
+  inFocus: boolean;
+  guesses: string[];
+  number: number;
+  guessed: boolean;
+  results: LETTER_RESULTS[];
+}
+
 export enum LETTER_RESULTS {
   "SUCCESS" = "letter-success",
   "MISPLACED" = "letter-misplaced",
