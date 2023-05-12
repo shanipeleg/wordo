@@ -8,7 +8,7 @@ import useCountdown from "@/app/hooks/useCountdown";
 import generateUniqueRandomNumbers from "@/app/utils/generateUniqueRandomNumbers";
 import useToast from "@/app/hooks/useToast";
 import React, { KeyboardEvent } from "react";
-import { useCookies } from "react-cookie";
+
 import Stats from "./stats";
 import skip from "../../../../public/skip.svg";
 import dayjs from "dayjs";
@@ -40,7 +40,6 @@ export default function Wordo() {
 
   const timeToAnswer = 60;
   const [gameRecord, setGameRecord] = useState<gameDataInterface[]>([]);
-  const [cookies, setCookie] = useCookies(["wordo"]);
 
   const [wordMap, setWordMap] = useState<wordMap[]>([]);
   const [gameRunning, setGameRunning] = useState(false);
@@ -117,19 +116,25 @@ export default function Wordo() {
     });
   }
 
+  function saveRecord(wordsGuessed: number, wordsSkipped: number) {
+    fetch("/api/saveRecord", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ wordsGuessed, wordsSkipped }),
+    })
+      .then((res) => res.json())
+      .then(({ data }) => console.log(data));
+  }
+
   function stopGame() {
     setGameRunning(false);
   }
   useEffect(() => {
     if (!gameRunning) {
       if (gameData.gameStarted) {
-        const gameToRecord = { ...gameData, dateTime: Date.now() };
-        const records = cookies["wordo"];
-        const replaceCookie = Array.isArray(records)
-          ? [...records, gameToRecord]
-          : [gameToRecord];
-        setCookie("wordo", replaceCookie);
-        setGameRecord((prevArray) => [...prevArray, gameToRecord]);
+        saveRecord(gameData.wordsGuessed, gameData.wordsSkipped);
       }
       resetGameData();
     }
