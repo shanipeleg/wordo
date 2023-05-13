@@ -1,29 +1,26 @@
+import { fetchRecords } from "@/app/services/recordAPI";
 import { useEffect, useState } from "react";
 
-import { gameDataInterface } from "./wordo";
+export interface FetchRecordsResponse {
+  records: Record[];
+  success: boolean;
+}
+
+export interface Record {
+  id: number;
+  wordsGuessed: number;
+  wordsSkipped: number;
+  score: number;
+  createdAt: string;
+}
 
 export default function Stats() {
   const [statsRanked, setStatsRanked] = useState<Record[]>([]);
 
-  interface FetchRecordsResponse {
-    records: Record[];
-    success: boolean;
-  }
-
-  interface Record {
-    id: number;
-    wordsGuessed: number;
-    wordsSkipped: number;
-    score: number;
-    createdAt: string;
-  }
-
   useEffect(() => {
-    fetch("/api/fetchRecords")
-      .then((res) => res.json())
-      .then((response: FetchRecordsResponse) => {
-        rankStats(response.records);
-      });
+    fetchRecords((records: Record[]) => {
+      setStatsRanked(records);
+    });
   }, []);
 
   function rankStats(data: Record[]) {

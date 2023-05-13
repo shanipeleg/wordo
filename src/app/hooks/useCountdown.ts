@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function useCountdown(
-  duration: number,
-  onTimerEnd: Function,
-  dependencies: any[] = []
-) {
+export default function useCountdown(duration: number, onTimerEnd: Function) {
   const [secondsLeft, setSecondsLeft] = useState(duration);
   const [isActive, setIsActive] = useState(false);
 

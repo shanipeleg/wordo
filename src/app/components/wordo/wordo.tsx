@@ -1,20 +1,16 @@
-import getRandomWord from "@/app/utils/getRandomWord";
-import words from "../../words_hints.json";
-import { useEffect, useRef, useState } from "react";
-import Keyboard from "../shared/keyboard";
+import { useEffect, useState } from "react";
+import Keyboard from "@/app/components/shared/keyboard";
 import { KEYS } from "@/app/consts";
 import useKeyPress from "@/app/hooks/useKeyPress";
 import useCountdown from "@/app/hooks/useCountdown";
-import generateUniqueRandomNumbers from "@/app/utils/generateUniqueRandomNumbers";
 import useToast from "@/app/hooks/useToast";
-import React, { KeyboardEvent } from "react";
+import buildWordMap from "@/app/utils/buildWordMap";
+import { saveRecord } from "@/app/services/recordAPI";
+import React from "react";
+import successMessages from "../../successMessages.json";
 
 import Stats from "./stats";
-import skip from "../../../../public/skip.svg";
-import dayjs from "dayjs";
-import { Dayjs } from "dayjs";
-import { faCoffee } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Game from "./game";
 
 export interface gameDataInterface {
   currentWordIndex: number;
@@ -23,14 +19,14 @@ export interface gameDataInterface {
   gameStarted: boolean;
 }
 
-export default function Wordo() {
-  interface wordMap {
-    word: string[];
-    guessable: (string | null)[];
-    indexes: number[];
-    hint: string;
-  }
+export interface wordMap {
+  word: string[];
+  guessable: (string | null)[];
+  indexes: number[];
+  hint: string;
+}
 
+export default function Wordo() {
   const [gameData, setGameData] = useState<gameDataInterface>({
     currentWordIndex: 0,
     wordsGuessed: 0,
@@ -43,63 +39,14 @@ export default function Wordo() {
 
   const [wordMap, setWordMap] = useState<wordMap[]>([]);
   const [gameRunning, setGameRunning] = useState(false);
-  const { secondsLeft, startTimer, resetTimer } = useCountdown(
-    timeToAnswer,
-    stopGame,
-    [gameRunning]
-  );
+  const { secondsLeft, startTimer } = useCountdown(timeToAnswer, stopGame);
   const [lettersToGuess, setLettersToGuess] = useState(2);
   const [wordState, setWordState] = useState("");
 
-  function findNextWord(allWords: string[], wordOfTheGameSplit: string[]) {
-    const wordGames: { [key: string]: string } = words;
-
-    let indexes = generateUniqueRandomNumbers(
-      0,
-      wordOfTheGameSplit.length - 1,
-      lettersToGuess
-    );
-
-    const nextWordString =
-      allWords[Math.floor(Math.random() * allWords.length)];
-    const nextWordArray = nextWordString.split("");
-    let makeGuessable: (string | null)[] = [];
-    nextWordArray.forEach((letter, index) => {
-      let toPush = indexes.includes(index) ? null : letter;
-      makeGuessable.push(toPush);
-    });
-
-    return {
-      word: nextWordArray,
-      guessable: makeGuessable,
-      indexes,
-      hint: wordGames[nextWordString],
-    };
-  }
-
-  function buildWordMap() {
-    let wordsAsArray = Object.keys(words);
-    const wordOfTheGame = getRandomWord(wordsAsArray);
-    const wordOfTheGameSplit = wordOfTheGame.split("");
-    let nextWord = findNextWord(wordsAsArray, wordOfTheGameSplit);
-    let count = 0;
-    const data = [];
-    while (nextWord && count <= 100) {
-      nextWord = findNextWord(wordsAsArray, nextWord.word);
-      if (nextWord) {
-        let nextWordJoined = nextWord.word.join("");
-        data.push(nextWord);
-        wordsAsArray = wordsAsArray.filter((word) => word !== nextWordJoined);
-        count++;
-      }
-    }
-    return data;
-  }
-
-  const { showToast, showToastMessage, toastMessage } = useToast();
+  const { showToastMessage, toastMessage } = useToast();
 
   function startGame() {
-    const map = buildWordMap();
+    const map = buildWordMap(lettersToGuess);
     setWordMap(map);
     setGameRunning(true);
     startTimer();
@@ -114,18 +61,6 @@ export default function Wordo() {
       wordsSkipped: 0,
       gameStarted: false,
     });
-  }
-
-  function saveRecord(wordsGuessed: number, wordsSkipped: number) {
-    fetch("/api/saveRecord", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ wordsGuessed, wordsSkipped }),
-    })
-      .then((res) => res.json())
-      .then(({ data }) => console.log(data));
   }
 
   function stopGame() {
@@ -152,7 +87,9 @@ export default function Wordo() {
       return;
     }
     if (word.word.join("") === word.guessable.join("")) {
-      showToastMessage(`You got it!`);
+      const successMessage =
+        successMessages[Math.floor(Math.random() * successMessages.length)];
+      showToastMessage(successMessage);
       setWordState("dance-animation");
       setGameData((prevGameData) => ({
         ...prevGameData,
@@ -217,27 +154,8 @@ export default function Wordo() {
 
   function renderGame() {
     let word = wordMap[gameData.currentWordIndex];
-    if (!word) return;
-    return (
-      <div className="grid place-items-center h-[30rem] text-center">
-        <div className={`word ${wordState}`}>
-          {word.guessable.map((letter, index) => (
-            <div
-              className={`letter brightness-90 shadow-lg rounded-md select-none  ${
-                word.indexes.includes(index)
-                  ? "text-white animation-pulse"
-                  : "text-gray-400"
-              }`}
-              key={(letter ?? "-") + index}
-            >
-              {letter}
-            </div>
-          ))}
-        </div>
-        <div className="centered xs:w-[15em]">Hint: {word.hint}</div>
-        <div className="centered xs:w-[15em]">{secondsLeft} seconds left!</div>
-      </div>
-    );
+    if (!word) return null;
+    return <Game secondsLeft={secondsLeft} wordState={wordState} word={word} />;
   }
   return (
     <div className="flex justify-center items-center min-h-screen">
